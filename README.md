@@ -74,6 +74,17 @@ When you enter `AAPL`, the system generates a **trend chart** like this:
 
 ---
 
+## 📥 Installation & Usage
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/stock-market-multi-agent.git
+   cd stock-market-multi-agent
+
+pip install -r requirements.txt
+
+python main.py
+
+
 ## 👨‍💻 Contributing
 Feel free to fork the repo, suggest improvements, or add new features!
 
