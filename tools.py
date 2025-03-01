@@ -1,29 +1,22 @@
 import yfinance as yf
-import matplotlib.pyplot as plt
-import pandas as pd
 
-def fetch_stock_data(ticker: str, period: str = "3mo"):
-    stock = yf.Ticker(ticker)
-    hist = stock.history(period=period)
+def fetch_stock_data(ticker):
+    """
+    Fetches the latest stock price for a given ticker using Yahoo Finance.
+    
+    :param ticker: Stock symbol (e.g., "AAPL").
+    :return: Stock price or error message.
+    """
+    try:
+        stock = yf.Ticker(ticker)
+        history = stock.history(period="1d")
+        
+        # Check if data is empty (invalid ticker)
+        if history.empty:
+            return "Error: Invalid stock ticker '" + ticker + "'. Please check the symbol."
 
-    if hist.empty:
-        return "Invalid stock ticker or no data available."
-
-    # Calculate moving averages
-    hist["SMA_20"] = hist["Close"].rolling(window=20).mean()
-    hist["SMA_50"] = hist["Close"].rolling(window=50).mean()
-
-    # Plot stock prices
-    plt.figure(figsize=(10, 5))
-    plt.plot(hist.index, hist["Close"], label="Closing Price", color="blue")
-    plt.plot(hist.index, hist["SMA_20"], label="20-day SMA", linestyle="dashed", color="green")
-    plt.plot(hist.index, hist["SMA_50"], label="50-day SMA", linestyle="dashed", color="red")
-    plt.xlabel("Date")
-    plt.ylabel("Price (USD)")
-    plt.title(f"{ticker} Stock Price & Trend Analysis")
-    plt.legend()
-    plt.grid()
-    plt.savefig(f"{ticker}_chart.png")  # Save chart for sharing
-    plt.close()
-
-    return f"Stock analysis complete for {ticker}. Trends plotted."
+        price = history["Close"].iloc[-1]
+        return "Stock: " + ticker + " | Price: $" + str(round(price, 2))
+    
+    except Exception as e:
+        return "Error fetching stock data: " + str(e)
